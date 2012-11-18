@@ -63,17 +63,14 @@ describe 'swift::ringbuilder' do
           class { "ssh::server::install": }
           ring_object_device { "127.0.0.1:6000/1":
           zone        => 1,
-          weight      => 1,
         }
 
         ring_container_device { "127.0.0.1:6001/1":
           zone        => 2,
-          weight      => 1,
         }
 
         ring_account_device { "127.0.0.1:6002/1":
           zone        => 3,
-          weight      => 1,
         }'
       end
 
