@@ -13,24 +13,11 @@ describe 'swift' do
     }
   end
 
-  let :pre_condition do
-    "include ssh::server::install"
-  end
-
   describe 'when no swift hash is specified' do
     let :params do
       {}
     end
     it 'should raise an exception' do
-      expect { subject }.to raise_error(Puppet::Error)
-    end
-  end
-
-  describe 'when ssh server install class is not included' do
-    let :pre_condition do
-      ''
-    end
-    it 'should should raise an exception' do
       expect { subject }.to raise_error(Puppet::Error)
     end
   end

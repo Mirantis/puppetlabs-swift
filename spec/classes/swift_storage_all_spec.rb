@@ -14,7 +14,6 @@ describe 'swift::storage::all' do
 
   let :pre_condition do
     "class { 'swift': swift_hash_suffix => 'changeme' }
-     include ssh::server::install
     "
   end
 

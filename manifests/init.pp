@@ -7,10 +7,6 @@
 # [*package_ensure*] The ensure state for the swift package.
 #   Optional. Defaults to present.
 #
-# == Dependencies
-#
-#   Class['ssh::server::install']
-#
 # == Authors
 #
 #   Dan Bode dan@puppetlabs.com
@@ -25,7 +21,7 @@ class swift(
 ) {
 
   include swift::params
-
+  include ssh::server::install
   Class['ssh::server::install'] -> Class['swift']
 
   package { 'swift':

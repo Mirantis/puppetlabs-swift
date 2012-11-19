@@ -9,8 +9,7 @@ describe 'swift::storage::account' do
   end
 
   let :pre_condition do
-    "class { 'ssh::server::install': }
-     class { 'swift': swift_hash_suffix => 'foo' }
+    "class { 'swift': swift_hash_suffix => 'foo' }
      class { 'swift::storage': storage_local_net_ip => '10.0.0.1' }"
   end
 
