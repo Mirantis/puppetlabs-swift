@@ -1,4 +1,5 @@
 class swift::storage::container(
+  $swift_zone,
   $package_ensure = 'present'
 ) {
   swift::storage::generic { 'container':
@@ -30,5 +31,10 @@ class swift::storage::container(
       provider  => $::swift::params::service_provider,
       require   => File['/etc/init/swift-container-sync.conf']
     }
+  }
+  
+  @@ring_container_device { "${swift_local_net_ip}:${port}":
+    zone => $swift_zone,
+    mountpoints => $swift_mountpoints,
   }
 }

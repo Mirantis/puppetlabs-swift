@@ -17,7 +17,8 @@ describe 'swift::storage::server' do
      class { 'swift::storage': storage_local_net_ip => '10.0.0.1' }"
   end
   let :default_params do
-    {:devices => '/srv/node',
+    {:swift_zone => '1',
+     :devices => '/srv/node',
      :owner => 'swift',
      :group  => 'swift',
      :max_connections => '25'}
@@ -26,6 +27,7 @@ describe 'swift::storage::server' do
   describe 'with an invalid title' do
     let :params do
       {:storage_local_net_ip => '127.0.0.1',
+      :swift_zone => '1',
       :type => 'object'}
     end
     let :title do
@@ -45,7 +47,7 @@ describe 'swift::storage::server' do
       end
 
       let :req_params do
-        {:storage_local_net_ip => '10.0.0.1', :type => t}
+        {:storage_local_net_ip => '10.0.0.1', :swift_zone => '1', :type => t}
       end
       let :params do
         req_params

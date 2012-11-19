@@ -15,7 +15,8 @@ describe 'swift::storage::account' do
   end
 
   let :default_params do
-    {:package_ensure => 'present'}
+    {:swift_zone => '1',
+     :package_ensure => 'present'}
   end
 
   [{},
@@ -26,7 +27,7 @@ describe 'swift::storage::account' do
         default_params.merge(param_set)
       end
       let :params do
-        param_set
+        default_params.merge(param_set)
       end
       it { should contain_swift__storage__generic('account').with_package_ensure(param_hash[:package_ensure]) }
     end

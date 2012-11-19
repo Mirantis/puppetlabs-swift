@@ -20,14 +20,25 @@ describe 'swift::storage::all' do
 
   let :default_params do
     {
+      :swift_zone => 1,
       :devices => '/srv/node',
       :object_port => '6000',
       :container_port => '6001',
-      :account_port => '6002'
+      :account_port => '6002',
     }
   end
 
+  describe 'when swift_zone is not specified' do
+    it 'should fail' do
+      expect { subject }.to raise_error(Puppet::Error, /Must pass swift_zone/)
+    end
+  end
+
   describe 'when an internal network ip is not specified' do
+    let :params do
+      { :swift_zone => '1' }
+    end
+
     it 'should fail' do
       expect { subject }.to raise_error(Puppet::Error, /Must pass storage_local_net_ip/)
     end
@@ -47,12 +58,8 @@ describe 'swift::storage::all' do
   ].each do |param_set|
 
     describe "when #{param_set == {} ? "using default" : "specifying"} class parameters" do
-      let :param_hash do
-        default_params.merge(param_set)
-      end
-
       let :params do
-        param_set
+        default_params.merge(param_set)
       end
 
       ['object', 'container', 'account'].each do |type|
@@ -78,30 +85,30 @@ describe 'swift::storage::all' do
       end
 
       let :storage_server_defaults do
-        {:devices              => param_hash[:devices],
-         :storage_local_net_ip => param_hash[:storage_local_net_ip]
+        {:devices              => params[:devices],
+         :storage_local_net_ip => params[:storage_local_net_ip]
         }
       end
 
-      it { should contain_swift__storage__server(param_hash[:account_port]).with(
+      it { should contain_swift__storage__server(params[:account_port]).with(
         {:type => 'account',
          :config_file_path => 'account-server.conf',
-         :pipeline => param_hash[:account_pipeline] || 'account-server' }.merge(storage_server_defaults)
+         :pipeline => params[:account_pipeline] || 'account-server' }.merge(storage_server_defaults)
       )}
-      it { should contain_swift__storage__server(param_hash[:object_port]).with(
+      it { should contain_swift__storage__server(params[:object_port]).with(
         {:type => 'object',
          :config_file_path => 'object-server.conf',
-         :pipeline => param_hash[:object_pipeline] || 'object-server' }.merge(storage_server_defaults)
+         :pipeline => params[:object_pipeline] || 'object-server' }.merge(storage_server_defaults)
       )}
-      it { should contain_swift__storage__server(param_hash[:container_port]).with(
+      it { should contain_swift__storage__server(params[:container_port]).with(
         {:type => 'container',
          :config_file_path => 'container-server.conf',
-         :pipeline => param_hash[:container_pipeline] || 'container-server' }.merge(storage_server_defaults)
+         :pipeline => params[:container_pipeline] || 'container-server' }.merge(storage_server_defaults)
       )}
 
       it { should contain_class('rsync::server').with(
         {:use_xinetd => true,
-         :address    => param_hash[:storage_local_net_ip],
+         :address    => params[:storage_local_net_ip],
          :use_chroot => 'no'
         }
       )}
@@ -128,12 +135,8 @@ describe 'swift::storage::all' do
     }
     ].each do |param_set|
       describe "when #{param_set == {} ? "using default" : "specifying"} class parameters" do
-        let :param_hash do
-          default_params.merge(param_set)
-        end
-
         let :params do
-          param_set
+          default_params.merge(param_set)
         end
         ['object', 'container', 'account'].each do |type|
           it { should contain_package("swift-#{type}").with_ensure('present') }

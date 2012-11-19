@@ -1,4 +1,5 @@
 class swift::storage::object(
+  $swift_zone,
   $package_ensure = 'present'
 ) {
   swift::storage::generic { 'object':
@@ -19,5 +20,10 @@ class swift::storage::object(
       provider  => $::swift::params::service_provider,
       require   => Package['swift-object'],
     }
+  }
+
+  @@ring_object_device { "${swift_local_net_ip}:${port}":
+    zone => $swift_zone,
+    mountpoints => $swift_mountpoints,
   }
 }

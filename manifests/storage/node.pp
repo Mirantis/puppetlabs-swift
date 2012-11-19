@@ -24,6 +24,7 @@ define swift::storage::node(
 
   swift::storage::server { "60${name}0":
     type => 'object',
+    swift_zone => $zone,
   }
   ring_object_device { "${storage_local_net_ip}:60${name}0/$name":
     zone        => $zone,
@@ -31,6 +32,7 @@ define swift::storage::node(
 
   swift::storage::server { "60${name}1":
     type => 'container',
+    swift_zone => $zone,
   }
   ring_container_device { "${storage_local_net_ip}:60${name}1/$name":
     zone        => $zone,
@@ -38,6 +40,7 @@ define swift::storage::node(
 
   swift::storage::server { "60${name}2":
     type => 'account',
+    swift_zone => $zone,
   }
   ring_account_device { "${storage_local_net_ip}:60${name}2/$name":
     zone        => $zone,

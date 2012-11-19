@@ -1,4 +1,5 @@
 class swift::storage::account(
+  $swift_zone,
   $package_ensure = 'present'
 ) {
   swift::storage::generic { 'account':
@@ -20,5 +21,10 @@ class swift::storage::account(
       provider  => $::swift::params::service_provider,
       require   => Package['swift-account'],
     }
+  }
+
+  @@ring_account_device { "${swift_local_net_ip}:${port}":
+    zone => $swift_zone,
+    mountpoints => $swift_mountpoints,
   }
 }
